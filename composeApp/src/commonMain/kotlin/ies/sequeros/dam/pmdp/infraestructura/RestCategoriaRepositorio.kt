@@ -10,9 +10,7 @@ import io.ktor.http.*
 
 class RestCategoriaRepositorio(private val url:String,private val _client: HttpClient) : ICategoriaRepositorio {
     override suspend fun all(): List<Categoria> {
-        //this._client es un objeto de la clase HttpClient con el plugin configurado
         val request = this._client.get(url)
-        //obtiene el body (json), serializa y devuelve una lista de objetos
         val items: List<Categoria> = request.body()
         return items
     }
