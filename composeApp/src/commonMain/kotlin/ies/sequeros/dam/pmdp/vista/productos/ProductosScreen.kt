@@ -102,7 +102,7 @@ fun ProductosScreen(
             onDismiss = { showForm = false },
             onSave = { nombre, descripcion, precio, activo ->
                 if (selectedProducto == null) {
-                    viewModel.addProducto(categoriaId, nombre, descripcion, precio, activo)
+                    viewModel.addProducto(categoriaId, nombre, descripcion, precio.toDouble(), activo)
                 } else {
                     viewModel.updateProducto(selectedProducto!!.id, categoriaId, nombre, descripcion, precio, activo)
                 }

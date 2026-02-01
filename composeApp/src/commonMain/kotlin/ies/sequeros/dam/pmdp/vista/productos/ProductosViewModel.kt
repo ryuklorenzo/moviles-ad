@@ -40,6 +40,7 @@ class ProductosViewModel(
                     _state.value = allProductos.filter { it.categoriaId == categoriaId }
                 }
             } catch (e: Exception) {
+                println("ERROR GRAVE EN VIEWMODEL: ${e.message}")
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false
@@ -47,15 +48,15 @@ class ProductosViewModel(
         }
     }
 
-    fun addProducto(categoriaId: String, nombre: String, descripcion: String, precio: Float, activo: Boolean) {
+    fun addProducto(categoriaId: String, nombre: String, descripcion: String, precio: Double, activo: Boolean) {
         viewModelScope.launch {
             try {
                 withContext(DispatcherIO) {
-                    val id = Random.nextLong().toString()
-                    addUseCase(AddProductoCommand(id, nombre, descripcion, categoriaId, precio, activo))
+                    addUseCase(AddProductoCommand(nombre, descripcion, categoriaId, precio, activo))
                     loadProductos(categoriaId)
                 }
             } catch (e: Exception) {
+                println("ERROR GRAVE EN VIEWMODEL: ${e.message}")
                 e.printStackTrace()
             }
         }
@@ -69,6 +70,7 @@ class ProductosViewModel(
                     loadProductos(categoriaId)
                 }
             } catch (e: Exception) {
+                println("ERROR GRAVE EN VIEWMODEL: ${e.message}")
                 e.printStackTrace()
             }
         }
@@ -82,6 +84,7 @@ class ProductosViewModel(
                     loadProductos(categoriaId)
                 }
             } catch (e: Exception) {
+                println("ERROR GRAVE EN VIEWMODEL: ${e.message}")
                 e.printStackTrace()
             }
         }

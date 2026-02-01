@@ -1,5 +1,7 @@
 package ies.sequeros.dam.pmdp.infraestructura
 
+import ies.sequeros.dam.pmdp.aplicacion.categorias.commands.AddCategoriaCommand
+import ies.sequeros.dam.pmdp.aplicacion.categorias.commands.UpdateCategoriaCommand
 import ies.sequeros.dam.pmdp.modelo.Categoria
 import ies.sequeros.dam.pmdp.modelo.ICategoriaRepositorio
 import io.ktor.client.HttpClient
@@ -8,29 +10,38 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 
 class RestCategoriaRepositorio(private val url: String, private val _client: HttpClient) : ICategoriaRepositorio {
+
     override suspend fun all(): List<Categoria> {
         return _client.get(url).body()
     }
 
-    override suspend fun update(item: Categoria) {
-        _client.put("$url/${item.id}") {
+    override suspend fun create(item: Categoria) {
+        // SOLUCIÓN: Usamos el objeto Command en lugar de mapOf
+        val command = AddCategoriaCommand(
+            //id = item.id,
+            nombre = item.nombre,
+            descripcion = item.descripcion,
+            activo = item.activo
+        )
+
+        _client.post(url) {
             contentType(ContentType.Application.Json)
-            setBody(mapOf(
-                "nombre" to item.nombre,
-                "descripcion" to item.descripcion,
-                "activo" to item.activo
-            ))
+            setBody(command)
         }
     }
 
-    override suspend fun create(item: Categoria) {
-        _client.post(url) {
+    override suspend fun update(item: Categoria) {
+        // SOLUCIÓN: Usamos el objeto Command con el ID
+        val command = UpdateCategoriaCommand(
+            id = item.id,
+            nombre = item.nombre,
+            descripcion = item.descripcion,
+            activo = item.activo
+        )
+
+        _client.put("$url/${item.id}") {
             contentType(ContentType.Application.Json)
-            setBody(mapOf(
-                "nombre" to item.nombre,
-                "descripcion" to item.descripcion,
-                "activo" to item.activo
-            ))
+            setBody(command)
         }
     }
 
@@ -47,6 +58,7 @@ class RestCategoriaRepositorio(private val url: String, private val _client: Htt
         return try {
             _client.get("$url/$id").body()
         } catch (e: Exception) {
+            println("Error buscando categoría $id: ${e.message}")
             null
         }
     }

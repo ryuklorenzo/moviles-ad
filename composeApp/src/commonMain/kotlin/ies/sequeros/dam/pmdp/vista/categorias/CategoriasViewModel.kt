@@ -41,6 +41,7 @@ class CategoriasViewModel(
                     _state.value = getAllUseCase.invoke()
                 }
             } catch (e: Exception) {
+                println("ERROR GRAVE EN VIEWMODEL: ${e.message}")
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false
@@ -53,11 +54,11 @@ class CategoriasViewModel(
             try {
                 withContext(DispatcherIO) {
                     // Generar un ID simple para el cliente
-                    val id = Random.nextLong().toString()
-                    addUseCase(AddCategoriaCommand(id, nombre, descripcion, activo))
+                    addUseCase(AddCategoriaCommand(nombre, descripcion, activo))
                     loadCategorias()
                 }
             } catch (e: Exception) {
+                println("ERROR GRAVE EN VIEWMODEL: ${e.message}")
                 e.printStackTrace()
             }
         }
@@ -71,6 +72,7 @@ class CategoriasViewModel(
                     loadCategorias()
                 }
             } catch (e: Exception) {
+                println("ERROR GRAVE EN VIEWMODEL: ${e.message}")
                 e.printStackTrace()
             }
         }
@@ -84,6 +86,7 @@ class CategoriasViewModel(
                     loadCategorias()
                 }
             } catch (e: Exception) {
+                println("ERROR GRAVE EN VIEWMODEL: ${e.message}")
                 e.printStackTrace()
             }
         }

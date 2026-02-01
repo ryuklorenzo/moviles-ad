@@ -8,15 +8,16 @@ class AddProductoUseCase(
     private val repository: IProductoRepositorio
 
 ) {
-    suspend operator fun invoke(command: AddProductoCommand){
+    suspend operator fun invoke(command: AddProductoCommand): Producto?{
         val producto = Producto(
-            id = command.id,
+            id = "",
             nombre = command.nombre,
             descripcion = command.descripcion,
             categoriaId = command.categoriaId,
-            precio = command.precio,
+            precio = command.precio.toFloat(),
             activo = command.activo
         )
         repository.create(producto)
+        return null
     }
 }

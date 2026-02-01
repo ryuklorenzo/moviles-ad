@@ -9,7 +9,7 @@ class AddCategoriaUseCase(
 ) {
     suspend operator fun invoke(command: AddCategoriaCommand) {
         val categoria = Categoria(
-            id = command.id,
+            id = "",
             nombre = command.nombre,
             descripcion = command.descripcion,
             activo = command.activo
