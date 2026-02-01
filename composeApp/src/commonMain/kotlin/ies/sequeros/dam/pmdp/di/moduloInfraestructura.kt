@@ -34,6 +34,6 @@ val moduloInfraestructura = module {
         }
     }
 
-    single<ICategoriaRepositorio> { RestCategoriaRepositorio(get(), get()) }
-    single<IProductoRepositorio> { RestProductoRepositorio(get(), get()) }
+    single<ICategoriaRepositorio> { RestCategoriaRepositorio("/categorias", get()) }
+    single<IProductoRepositorio> { RestProductoRepositorio("/productos", get()) }
 }

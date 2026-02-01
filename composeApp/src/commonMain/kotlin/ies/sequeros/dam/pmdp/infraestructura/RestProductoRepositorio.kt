@@ -10,15 +10,21 @@ import io.ktor.http.*
 
 class RestProductoRepositorio(private val url:String,private val _client: HttpClient): IProductoRepositorio {
     override suspend fun all(): List<Producto> {
-        val request = this._client.get(url)
-        val items: MutableList<Producto> = request.body()
-        return items
+        return _client.get(url).body()
     }
 
     override suspend fun create(item: Producto) {
-        _client.put("$url/${item.id}") {
+        // CORREGIDO: POST sin ID en URL
+        _client.post(url) {
             contentType(ContentType.Application.Json)
-            setBody(item)
+            // Mapeamos para encajar con el servidor (sin ID, precio como double/float)
+            setBody(mapOf(
+                "nombre" to item.nombre,
+                "descripcion" to item.descripcion,
+                "precio" to item.precio,
+                "activo" to item.activo,
+                "categoriaId" to item.categoriaId
+            ))
         }
     }
 
@@ -49,9 +55,16 @@ class RestProductoRepositorio(private val url:String,private val _client: HttpCl
     }
 
     override suspend fun update(item: Producto) {
-        _client.post(url) {
+        // CORREGIDO: PUT con ID en URL
+        _client.put("$url/${item.id}") {
             contentType(ContentType.Application.Json)
-            setBody(item)
+            setBody(mapOf(
+                "nombre" to item.nombre,
+                "descripcion" to item.descripcion,
+                "precio" to item.precio,
+                "activo" to item.activo,
+                "categoriaId" to item.categoriaId
+            ))
         }
     }
 

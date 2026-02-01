@@ -7,31 +7,36 @@ import io.ktor.client.call.body
 import io.ktor.client.request.*
 import io.ktor.http.*
 
-
-class RestCategoriaRepositorio(private val url:String,private val _client: HttpClient) : ICategoriaRepositorio {
+class RestCategoriaRepositorio(private val url: String, private val _client: HttpClient) : ICategoriaRepositorio {
     override suspend fun all(): List<Categoria> {
-        val request = this._client.get(url)
-        val items: List<Categoria> = request.body()
-        return items
+        return _client.get(url).body()
     }
 
     override suspend fun update(item: Categoria) {
-        _client.post(url) {
+        _client.put("$url/${item.id}") {
             contentType(ContentType.Application.Json)
-            setBody(item)
+            setBody(mapOf(
+                "nombre" to item.nombre,
+                "descripcion" to item.descripcion,
+                "activo" to item.activo
+            ))
         }
     }
 
     override suspend fun create(item: Categoria) {
-        _client.put("$url/${item.id}") {
+        _client.post(url) {
             contentType(ContentType.Application.Json)
-            setBody(item)
+            setBody(mapOf(
+                "nombre" to item.nombre,
+                "descripcion" to item.descripcion,
+                "activo" to item.activo
+            ))
         }
     }
 
     override suspend fun delete(item: Categoria?) {
         if (item == null) return
-        _client.delete("$url/${item.id}")
+        delete(item.id)
     }
 
     override suspend fun delete(id: String) {
@@ -54,5 +59,4 @@ class RestCategoriaRepositorio(private val url:String,private val _client: HttpC
             false
         }
     }
-
 }
