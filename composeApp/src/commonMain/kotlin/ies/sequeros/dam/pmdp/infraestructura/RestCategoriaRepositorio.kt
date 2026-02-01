@@ -16,9 +16,7 @@ class RestCategoriaRepositorio(private val url: String, private val _client: Htt
     }
 
     override suspend fun create(item: Categoria) {
-        // SOLUCIÓN: Usamos el objeto Command en lugar de mapOf
         val command = AddCategoriaCommand(
-            //id = item.id,
             nombre = item.nombre,
             descripcion = item.descripcion,
             activo = item.activo
@@ -31,7 +29,6 @@ class RestCategoriaRepositorio(private val url: String, private val _client: Htt
     }
 
     override suspend fun update(item: Categoria) {
-        // SOLUCIÓN: Usamos el objeto Command con el ID
         val command = UpdateCategoriaCommand(
             id = item.id,
             nombre = item.nombre,
