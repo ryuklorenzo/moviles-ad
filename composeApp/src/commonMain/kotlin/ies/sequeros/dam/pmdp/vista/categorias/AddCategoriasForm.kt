@@ -32,6 +32,7 @@ fun AddCategoriasForm(
     var nombre by remember { mutableStateOf(categoria?.nombre ?: "") }
     var descripcion by remember { mutableStateOf(categoria?.descripcion ?: "") }
     var activo by remember { mutableStateOf(categoria?.activo ?: false) }
+    val isFormValid = nombre.isNotBlank()
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -76,7 +77,8 @@ fun AddCategoriasForm(
                     Spacer(modifier = Modifier.padding(8.dp))
                     Button(
                         onClick = { onSave(nombre, descripcion, activo) },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        enabled = isFormValid
                     ) {
                         Text("Guardar")
                     }

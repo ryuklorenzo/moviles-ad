@@ -35,6 +35,9 @@ fun AddProductoForm(
     var descripcion by remember { mutableStateOf(producto?.descripcion ?: "") }
     var precioStr by remember { mutableStateOf(producto?.precio?.toString() ?: "") }
     var activo by remember { mutableStateOf(producto?.activo ?: false) }
+    val precio = precioStr.toFloatOrNull() ?: 0f
+    val isFormValid = nombre.isNotBlank() &&
+            precio > 0f
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -88,10 +91,10 @@ fun AddProductoForm(
                     Spacer(modifier = Modifier.padding(8.dp))
                     Button(
                         onClick = {
-                            val precio = precioStr.toFloatOrNull() ?: 0f
                             onSave(nombre, descripcion, precio, activo)
                         },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        enabled = isFormValid
                     ) {
                         Text("Guardar")
                     }
